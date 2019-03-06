@@ -11,54 +11,96 @@
     <div class="container">
 
         <div class="row">
-            <div class="col s6">
+            <form action="#" method="post">
+                {% csrf_token %}
 
-                <h5>Pick one language</h5>
+                <div class="col s6">
 
-                <form action="#">
+                    <h5>Pick one language</h5>
+
+
                     <div class="inline-radio-buttons">
                         <p style="display: inline; padding-right: 10px;">
                             <label>
-                                <input name="group1" type="radio" checked/>
+                                <input id="analyze-radio-c" name="analyze-group" type="radio" disabled/>
                                 <span>C</span>
                             </label>
                         </p>
                         <p style="display: inline; padding-right: 10px;">
                             <label>
-                                <input name="group1" type="radio"/>
+                                <input id="analyze-radio-c++" name="analyze-group" type="radio"/>
                                 <span>C++</span>
                             </label>
                         </p>
                         <p style="display: inline; padding-right: 10px;">
                             <label>
-                                <input class="with-gap" name="group1" type="radio"/>
+                                <input id="analyze-radio-c#" name="analyze-group" type="radio" disabled/>
                                 <span>C#</span>
                             </label>
                         </p>
                     </div>
-                </form>
+            </form>
 
-            </div>
-            <div class="col s6" style="padding-top: 2%; float: right;">
-                <button class="btn waves-effect waves-light btn-large" type="submit" name="action" style="float: right;">Analyze
-                    <i class="material-icons right"></i>
-                </button>
-            </div>
+        </div>
+        <div class="col s6" style="padding-top: 2%; float: right;">
+            <button id="analyze-button" class="btn waves-effect waves-light btn-large" style="float: right;">Analyze
+                <i class="material-icons right"></i>
+            </button>
         </div>
 
+    </div>
 
-        <div class="row">
-            <div class="col s6">
-                <h4>Place your code here and analyze it</h4>
-                <textarea placeholder="Input"></textarea>
-            </div>
-            <div class="col s6">
-                <h4>See your results here</h4>
-                <textarea placeholder="Output. Don't edit this textarea."></textarea>
-            </div>
+
+    <div class="row">
+        <div class="col s6">
+            <h4>Place your code here and analyze it</h4>
+            <textarea id="analyze-input" placeholder="Input"></textarea>
         </div>
+        <div class="col s6">
+            <h4>See your results here</h4>
+            <textarea id="analyze-output" placeholder="Output. Don't edit this textarea."></textarea>
+        </div>
+    </div>
 
 
     </div>
 
+
+    {% block javascript %}
+        <script>
+            $("#analyze-button").click(function () {
+
+                let input_validation = true;
+                let selected_language = $('input[name="analyze-group"]').filter(':checked').next().html();
+                let input_code = $('#analyze-input').val();
+
+                if (selected_language === undefined) {
+                    alert("You should pick one language!");
+                    input_validation = false;
+                }
+                if (input_code === undefined || input_code === "") {
+                    alert("Please insert some code as input!");
+                    input_validation = false;
+                }
+
+                if (input_validation === true) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/analyze",
+                        data: {
+                            language: selected_language,
+                            code: input_code
+                        },
+                        success: function (data) {
+                            $('#analyze-output').text(data)
+                        }
+                    })
+                }
+
+            });
+        </script>
+    {% endblock %}
+
 {% endblock %}
+
+
