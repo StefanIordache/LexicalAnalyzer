@@ -6,6 +6,6 @@ from django.conf.urls import (
 )
 
 urlpatterns = [
-    url(r'^analyze/$', analyze, name='analyze'),
+    url(r'^analyze$', analyze, name='analyze'),
     url(r'^', index, name='index'),
 ]

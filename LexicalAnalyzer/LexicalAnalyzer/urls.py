@@ -18,8 +18,10 @@ from django.contrib import admin
 from django.conf import settings
 from django.conf.urls.static import static
 from Analyzer import views
+from Analyzer.views import analyze
 
 urlpatterns = [
-    url(r'^', include('Analyzer.urls')),
+    url(r'^analyze', analyze, name='analyze'),
     url(r'^Analyzer/', include('Analyzer.urls')),
+    url(r'^', include('Analyzer.urls')),
 ]

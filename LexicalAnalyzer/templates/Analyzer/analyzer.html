@@ -22,13 +22,13 @@
                     <div class="inline-radio-buttons">
                         <p style="display: inline; padding-right: 10px;">
                             <label>
-                                <input id="analyze-radio-c" name="analyze-group" type="radio" disabled/>
+                                <input id="analyze-radio-c" name="analyze-group" type="radio"/>
                                 <span>C</span>
                             </label>
                         </p>
                         <p style="display: inline; padding-right: 10px;">
                             <label>
-                                <input id="analyze-radio-c++" name="analyze-group" type="radio"/>
+                                <input id="analyze-radio-c++" name="analyze-group" type="radio" disabled/>
                                 <span>C++</span>
                             </label>
                         </p>
@@ -92,7 +92,7 @@
                             code: input_code
                         },
                         success: function (data) {
-                            $('#analyze-output').text(data)
+                            $('#analyze-output').text(data.output)
                         }
                     })
                 }

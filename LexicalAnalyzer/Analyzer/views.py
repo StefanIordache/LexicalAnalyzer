@@ -6,6 +6,8 @@ from django.contrib.auth import authenticate, login, logout
 from django.http.response import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
+from Analyzer.utils.analyzer import analyze_input
+
 # Create your views here.
 
 
@@ -18,8 +20,8 @@ def analyze(request):
     if request.POST:
         selected_language = request.POST['language']
         input_code = request.POST['code']
-        print('ceva')
-        return HttpResponse(selected_language, content_type="application/json")
+        output = analyze_input(selected_language, input_code)
+        return JsonResponse({'output': selected_language})
     else:
         return render(request, 'Analyzer/analyzer.html')
 
