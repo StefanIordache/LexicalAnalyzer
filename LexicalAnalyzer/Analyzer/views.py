@@ -15,13 +15,12 @@ def index(request):
     return render(request, 'Analyzer/analyzer.html')
 
 
-@csrf_exempt
 def analyze(request):
     if request.POST:
         selected_language = request.POST['language']
         input_code = request.POST['code']
         output = analyze_input(selected_language, input_code)
-        return JsonResponse({'output': selected_language})
+        return JsonResponse({'output': output})
     else:
         return render(request, 'Analyzer/analyzer.html')
 

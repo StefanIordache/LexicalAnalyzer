@@ -84,12 +84,12 @@
                 }
 
                 if (input_validation === true) {
-                    $.ajax({
-                        type: "POST",
+                    $.post({
                         url: "/analyze",
                         data: {
                             language: selected_language,
-                            code: input_code
+                            code: input_code,
+                            csrfmiddlewaretoken: '{{ csrf_token }}'
                         },
                         success: function (data) {
                             $('#analyze-output').text(data.output)

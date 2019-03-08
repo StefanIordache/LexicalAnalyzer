@@ -1,0 +1,11 @@
+int functie()
+{
+    return 41.56.90;
+}
+
+int main()
+{
+    int intb = 6;
+    int a = b + functie();
+   /* return a;
+}*/
