@@ -15,9 +15,12 @@ current_column = 0
 current_char_index = 0
 current_char = " "
 input_length = 0
+error_message = ""
 
 
 def error_alert(line, column, message):
+    global error_message
+    error_message = "ERROR - " + str(line) + " - " + str(column) + " - " + message + "\n"
     print("ERROR   %5d   %5d   %-30s" % (line, column, message), end='')
 
 
@@ -118,7 +121,7 @@ def try_identifier_or_number(line, column):
             except ValueError:
                 is_float = False
         if not is_float:
-            error_alert(line, column, "Invalid number: %s" % (text))
+            return error_alert(line, column, "Invalid number: %s" % (text))
 
     if text in keywords:
         return "KEYWORD", line, column, text
@@ -138,8 +141,9 @@ def check_pattern(expected_character, if_yes, if_no, line, column):
 
 
 def get_token():
-    while current_char.isspace():
-        get_next_char()
+    if current_char_index < len(code):
+        while current_char.isspace():
+            get_next_char()
 
     line = current_line
     column = current_column
@@ -186,36 +190,41 @@ def analyze_c(input_code):
 
     while True and current_char_index <= len(code):
         t = get_token()
-        token = t[0]
-        token_line = t[1]
-        token_column = t[2]
+        if t is not None:
+            # t = get_token()
+            token = t[0]
+            token_line = t[1]
+            token_column = t[2]
 
-        output += str(token_line) + " - " + str(token_column) + " - " + str(token)
+            output += str(token_line) + " - " + str(token_column) + " - " + str(token)
 
-        print("%7d   %7d   %-60s" % (token_line, token_column, token), end='')
+            print("%7d   %7d   %-60s" % (token_line, token_column, token), end='')
 
-        if token == "INT":
-            print("   %7d" % (t[3]))
-            output += "    " + str(t[3])
-        if token == 'FLOAT':
-            print(t[3])
-            output += "    " + str(t[3])
-        elif token == "IDENTIFIER":
-            print("   %s" % (t[3]))
-            output += "    " + str(t[3])
-        elif token == "STRING":
-            print('   "%s"' % (t[3]))
-            output += '    "' + str(t[3]) + '"'
-        elif token == "KEYWORD":
-            print('   "%s"' % (t[3]))
-            output += '    "' + str(t[3]) + '"'
+            if token == "INT":
+                print("   %7d" % (t[3]))
+                output += "    " + str(t[3])
+            if token == 'FLOAT':
+                print(t[3])
+                output += "    " + str(t[3])
+            elif token == "IDENTIFIER":
+                print("   %s" % (t[3]))
+                output += "    " + str(t[3])
+            elif token == "STRING":
+                print('   "%s"' % (t[3]))
+                output += '    "' + str(t[3]) + '"'
+            elif token == "KEYWORD":
+                print('   "%s"' % (t[3]))
+                output += '    "' + str(t[3]) + '"'
+            else:
+                print('')
+                output += ''
+
+            output += '\n'
+
+            if token == "End of Input" or current_char_index == len(code):
+                break
         else:
+            output += error_message
             print('')
-            output += ''
-
-        output += '\n'
-
-        if token == "End of Input" or current_char_index == len(code):
-            break
 
     return output
